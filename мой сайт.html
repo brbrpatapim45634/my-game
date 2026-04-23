@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>XP Игра</title>
+</head>
+
+<body>
+
+  <div style="
+    background:#1c1c1c;
+    width:380px;
+    margin:60px auto;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+    font-family:Arial;
+    color:white;
+    box-shadow:0 0 20px rgba(0,255,200,0.2);
+  ">
+
+    <h1 style="color:#00ffcc;">XP ИГРА 🔥</h1>
+
+    <!-- НИК -->
+    <input id="nickInput" placeholder="Введи ник" style="
+      padding:8px;
+      border-radius:8px;
+      border:none;
+      margin-bottom:10px;
+    ">
+    <button onclick="setNick()" style="
+      padding:8px 10px;
+      border:none;
+      border-radius:8px;
+      background:#00ffcc;
+      cursor:pointer;
+      font-weight:bold;
+    ">
+      Сохранить ник
+    </button>
+
+    <h2 id="nick">Игрок</h2>
+
+    <!-- XP -->
+    <p>Уровень: <span id="level">1</span></p>
+    <p>XP: <span id="xp">0</span>/100</p>
+
+    <div style="width:100%; height:15px; background:#333; border-radius:10px; overflow:hidden;">
+      <div id="bar" style="width:0%; height:100%; background:#00ffcc;"></div>
+    </div>
+
+    <button onclick="addXP()" style="
+      margin-top:15px;
+      padding:10px 15px;
+      border:none;
+      border-radius:10px;
+      background:#00ffcc;
+      cursor:pointer;
+      font-weight:bold;
+    ">
+      +XP
+    </button>
+
+    <!-- МАГАЗИН -->
+    <h3 style="margin-top:20px;">🛒 Магазин</h3>
+
+    <button onclick="buyBoost()" style="
+      padding:10px;
+      margin:5px;
+      border:none;
+      border-radius:10px;
+      background:#444;
+      color:white;
+      cursor:pointer;
+    ">
+      +2 XP за клик (10 lvl)
+    </button>
+
+    <p id="shopMsg"></p>
+
+    <!-- АЧИВКИ -->
+    <h3 style="margin-top:20px;">🏆 Достижения</h3>
+
+    <p id="a1">❌ Получи 1 уровень</p>
+    <p id="a2">❌ Получи 3 уровень</p>
+
+  </div>
+
+  <script>
+    let xp = localStorage.getItem("xp");
+    let level = localStorage.getItem("level");
+    let nick = localStorage.getItem("nick");
+    let boost = localStorage.getItem("boost");
+
+    if (xp === null) xp = 0; else xp = parseInt(xp);
+    if (level === null) level = 1; else level = parseInt(level);
+    if (nick === null) nick = "Игрок";
+    if (boost === null) boost = 1; else boost = parseInt(boost);
+
+    function updateUI() {
+      document.getElementById("xp").innerText = xp;
+      document.getElementById("level").innerText = level;
+      document.getElementById("nick").innerText = nick;
+      document.getElementById("bar").style.width = xp + "%";
+
+      // АЧИВКИ
+      if (level >= 1) {
+        document.getElementById("a1").innerText = "✅ Получи 1 уровень";
+      }
+
+      if (level >= 3) {
+        document.getElementById("a2").innerText = "✅ Получи 3 уровень";
+      }
+    }
+
+    function addXP() {
+      xp += boost;
+
+      if (xp >= 100) {
+        xp = xp - 100;
+        level++;
+        alert("LEVEL UP 🔥");
+      }
+
+      localStorage.setItem("xp", xp);
+      localStorage.setItem("level", level);
+
+      updateUI();
+    }
+
+    function setNick() {
+      let input = document.getElementById("nickInput").value;
+
+      if (input !== "") {
+        nick = input;
+        localStorage.setItem("nick", nick);
+        updateUI();
+      }
+    }
+
+    function buyBoost() {
+      if (level >= 10) {
+        boost = 2;
+        localStorage.setItem("boost", boost);
+        document.getElementById("shopMsg").innerText = "Улучшение куплено 🔥";
+      } else {
+        document.getElementById("shopMsg").innerText = "Нужно 10 уровень ❌";
+      }
+    }
+
+    updateUI();
+  </script>
+
+</body>
+</html>
